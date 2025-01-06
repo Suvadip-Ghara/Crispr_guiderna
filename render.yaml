@@ -9,9 +9,15 @@ services:
       echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
       apt-get update -y
       apt-get install -y google-chrome-stable chromium-driver
-      # Install Python dependencies
+      # Install Python dependencies and gunicorn explicitly
+      pip install --upgrade pip
+      pip install gunicorn
       pip install -r requirements.txt
-    startCommand: gunicorn app:app
+      which gunicorn
+    startCommand: |
+      #!/usr/bin/env bash
+      PATH=$PATH:/usr/local/bin
+      gunicorn app:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.18
@@ -23,6 +29,8 @@ services:
         value: /usr/bin/google-chrome
       - key: CHROMEDRIVER_PATH
         value: /usr/bin/chromedriver
+      - key: PATH
+        value: /usr/local/bin:${PATH}
     healthCheckPath: /
     autoDeploy: true
     buildFilter:
