@@ -4,33 +4,28 @@ services:
     env: python
     buildCommand: |
       #!/usr/bin/env bash
-      # Install Chrome & Chromedriver
+      # Install system dependencies
       wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
       echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
       apt-get update -y
       apt-get install -y google-chrome-stable chromium-driver
-      # Install Python dependencies and gunicorn explicitly
-      pip install --upgrade pip
-      pip install gunicorn
-      pip install -r requirements.txt
-      which gunicorn
-    startCommand: |
-      #!/usr/bin/env bash
-      PATH=$PATH:/usr/local/bin
-      gunicorn app:app --bind 0.0.0.0:$PORT
+      
+      # Upgrade pip and install dependencies
+      python -m pip install --upgrade pip
+      python -m pip install gunicorn
+      python -m pip install -r requirements.txt
+    startCommand: python -m gunicorn app:app --bind 0.0.0.0:$PORT --log-file -
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.18
       - key: PORT
-        value: 10000
+        value: 5000
       - key: PYTHONUNBUFFERED
         value: "true"
       - key: CHROME_BIN
         value: /usr/bin/google-chrome
       - key: CHROMEDRIVER_PATH
         value: /usr/bin/chromedriver
-      - key: PATH
-        value: /usr/local/bin:${PATH}
     healthCheckPath: /
     autoDeploy: true
     buildFilter:
