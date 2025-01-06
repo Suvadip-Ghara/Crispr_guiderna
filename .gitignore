@@ -3,3 +3,4 @@ myenv/
 __pycache__/
 chromedriver.exe
 debug_logs/
+LICENSE.chromedriver
