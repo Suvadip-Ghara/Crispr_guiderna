@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>CRISPR Analysis Results</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CRISPR Guide RNA Analysis Results</h1>
+        </header>
+
+        <div class="results-container">
+            <div class="result-summary">
+                <h2>Analysis Summary</h2>
+                {% if species %}
+                <p>Analyzed sequence in FASTA format for <strong>{{ species }}</strong> with the following scores:</p>
+                {% else %}
+                <p>Analyzed sequence in FASTA format with the following scores:</p>
+                {% endif %}
+            </div>
+
+            {% if error %}
+            <div class="error-message">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+
+            <div class="table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Guide Sequence</th>
+                            <th>On-Target Score</th>
+                            <th>Off-Target Score</th>
+                            <th>Overall Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if sequence and on_target_score is not none and off_target_score is not none %}
+                        <tr>
+                            <td class="sequence-cell">
+                                <code>{{ sequence }}</code>
+                                <button class="copy-btn" data-sequence="{{ sequence }}" title="Copy sequence">
+                                    <svg width="16" height="16" fill="currentColor" class="copy-icon">
+                                        <path d="M4 2h7a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4z"/>
+                                    </svg>
+                                </button>
+                            </td>
+                            <td class="score-cell" title="Score indicating guide RNA efficiency">
+                                <div class="score-bar" style="width: {{ on_target_score * 100 }}%"></div>
+                                <span class="score-value">{{ "%.2f"|format(on_target_score) }}</span>
+                            </td>
+                            <td class="score-cell" title="Score indicating potential off-target effects">
+                                <div class="score-bar" style="width: {{ off_target_score * 100 }}%"></div>
+                                <span class="score-value">{{ "%.2f"|format(off_target_score) }}</span>
+                            </td>
+                            <td class="score-cell" title="Average of on-target and off-target scores">
+                                <div class="score-bar" style="width: {{ ((on_target_score + off_target_score) / 2) * 100 }}%"></div>
+                                <span class="score-value">{{ "%.2f"|format((on_target_score + off_target_score) / 2) }}</span>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="no-results">No results available or error in processing</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="score-legend">
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #4ade80"></span>
+                    <span class="legend-text">High Score (0.7-1.0)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #fbbf24"></span>
+                    <span class="legend-text">Medium Score (0.4-0.7)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #f87171"></span>
+                    <span class="legend-text">Low Score (0.0-0.4)</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="download-csv" class="download-button primary">
+                    <svg class="button-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 12l-5-5 1.41-1.41L10 9.17l3.59-3.58L15 7l-5 5z"/>
+                    </svg>
+                    Download CSV
+                </button>
+                <button id="download-json" class="download-button secondary">
+                    <svg class="button-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/>
+                    </svg>
+                    Export JSON
+                </button>
+                <a href="/" class="back-button">
+                    <svg class="button-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 18l-6-6 6-6M4 12h16"/>
+                    </svg>
+                    New Analysis
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast" role="alert" aria-live="polite" aria-atomic="true"></div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

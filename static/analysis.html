@@ -1,0 +1,46 @@
+<section id="analysis">
+    <h2>Guide RNA On/Off Target Analysis</h2>
+    <form id="analyze-form" class="analysis-form" method="POST" action="/analyze">
+        <div class="form-group">
+            <label for="sequence">DNA Sequence:</label>
+            <textarea 
+                id="sequence"
+                name="sequence" 
+                placeholder=">sequence_name
+ATGCATGCATGCATGCATGC" 
+                required
+                minlength="20"
+                maxlength="1000"
+            ></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="species">Target Species:</label>
+            <select id="species" name="species" required>
+                <option value="" disabled selected>Select a species</option>
+                <option value="human">Homo sapiens (Human)</option>
+                <option value="mouse">Mus musculus (Mouse)</option>
+                <option value="zebrafish">Danio rerio (Zebrafish)</option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-button">Analyze Sequence</button>
+    </form>
+
+    <div id="loading-spinner" class="spinner" style="display: none;">
+        <div class="spinner-inner"></div>
+        <p>Analyzing sequence, please wait...</p>
+    </div>
+
+    <div id="error-message" class="error-container"></div>
+    
+    <div id="results" class="results-container"></div>
+    
+    <a id="download-link" 
+       class="download-button" 
+       style="display: none;" 
+       href="#" 
+       download="crispr_results.csv">
+        Download Results (CSV)
+    </a>
+</section>

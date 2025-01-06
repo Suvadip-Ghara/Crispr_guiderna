@@ -4,18 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/style.css">
-    <title>CRISPR Analysis</title>
+    <title>CRISPR Guide RNA Analysis</title>
 </head>
 <body>
     <div class="container">
-        <h1>CRISPR Analysis Tool</h1>
-        <form id="analyze-form">
-            <textarea name="sequence" placeholder="Enter DNA sequence here..." required></textarea>
-            <button type="submit">Analyze</button>
-        </form>
-        <div id="results"></div>
-        <a id="download-link" style="display: none;" href="#">Download Results</a>
+        <div class="title-container">
+            <h1>CRISPR Guide RNA Analysis Tool</h1>
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li class="nav-item"><a href="#about" data-section="about">About This Tool</a></li>
+                <li class="nav-item"><a href="#design" data-section="design">Guide RNA Designing</a></li>
+                <li class="nav-item"><a href="#analysis" data-section="analysis">Guide RNA On/Off Target Analysis</a></li>
+            </ul>
+        </nav>
+
+            <main id="content">
+                <!-- Dynamic content will be loaded here -->
+            </main>
     </div>
+
+    <footer class="footer">
+        <p>About Us | Our Team | Contact Us | Privacy Policy | Website Disclaimer</p>
+        <p>© 2024 CRISPR Guide RNA Analysis Tool | All Rights Reserved</p>
+    </footer>
+
     <script src="/static/script.js"></script>
 </body>
 </html>

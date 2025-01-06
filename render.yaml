@@ -2,8 +2,26 @@ services:
   - type: web
     name: crispor-scraping
     env: python
-    buildCommand: docker build -t app .
-    startCommand: docker run -p $PORT:$PORT app
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.9
+      - key: PORT
+        value: 10000
+      - key: PYTHONUNBUFFERED
+        value: "true"
+      - key: CHROMEDRIVER_PATH
+        sync: false
+    healthCheckPath: /
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - requirements.txt
+        - "**/*.py"
+        - templates/**
+        - static/**
+    disk:
+      name: tmp
+      mountPath: /tmp
+      sizeGB: 1

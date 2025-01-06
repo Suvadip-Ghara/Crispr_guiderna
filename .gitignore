@@ -1,1 +1,5 @@
 myenv/ 
+*.log
+__pycache__/
+chromedriver.exe
+debug_logs/

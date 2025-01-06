@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Guide RNA Design Results</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Guide RNA Design Results</h1>
+        </header>
+
+        <div class="results-container">
+            <div class="result-summary">
+                <h2>Design Summary</h2>
+                <p>Found guide RNAs in the provided DNA sequence with the following properties:</p>
+            </div>
+
+            {% if error %}
+            <div class="error-message">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+
+            <div class="table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Guide Sequence</th>
+                            <th>PAM</th>
+                            <th>Start Position</th>
+                            <th>End Position</th>
+                            <th>Strand</th>
+                            <th>GC Content (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for guide_rna in guide_rnas %}
+                        <tr>
+                            <td class="sequence-cell">
+                                <code>{{ guide_rna.sequence }}</code>
+                            </td>
+                            <td>{{ guide_rna.pam }}</td>
+                            <td>{{ guide_rna.start_position }}</td>
+                            <td>{{ guide_rna.end_position }}</td>
+                            <td>{{ guide_rna.strand }}</td>
+                            <td>{{ "%.2f"|format(guide_rna.gc_content) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

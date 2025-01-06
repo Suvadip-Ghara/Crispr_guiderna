@@ -1,0 +1,19 @@
+<section id="design">
+    <h2>Guide RNA Designing</h2>
+    <p>Use this section to find guide RNAs from the entire DNA sequence along with the main properties of each guide RNA.</p>
+    <form id="design-form" class="analysis-form" method="POST" action="/design">
+        <div class="form-group">
+            <label for="dna-sequence">DNA Sequence:</label>
+            <textarea 
+                id="dna-sequence"
+                name="dna-sequence" 
+                placeholder=">sequence_name
+ATGCATGCATGCATGCATGC" 
+                required
+                minlength="20"
+                maxlength="1000"
+            ></textarea>
+        </div>
+        <button type="submit" class="submit-button">Find Guide RNAs</button>
+    </form>
+</section>
