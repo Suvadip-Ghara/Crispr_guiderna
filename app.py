@@ -103,40 +103,28 @@ def index():
 @app.route("/analyze", methods=["POST"])
 def analyze():
     try:
-        logger.info("Starting analysis...")
         sequence = request.form.get("sequence", "")
         species = request.form.get("species", "human")
-        logger.info(f"Received sequence: {sequence}")
-        logger.info(f"Selected species: {species}")
         
         if not sequence:
-            logger.error("No sequence provided")
             return render_template('results.html', error="No sequence provided")
         
         # Validate sequence
         is_valid, result = validate_sequence(sequence)
         if not is_valid:
-            logger.error(f"Invalid sequence: {result}")
             return render_template('results.html', error=result)
             
         # Get scraping results
         results = scrape_idtdna(result, species)
-        logger.info(f"Analysis results: {results}")
         
         if 'error' in results:
             return render_template('results.html', error=results['error'])
             
-        # Render results template
-        return render_template('results.html', 
-                             sequence=results['sequence'],
-                             species=species,
-                             on_target_score=results['on_target_score'],
-                             off_target_score=results['off_target_score'])
+        # Pass results as a dictionary
+        return render_template('results.html', guide_rnas=results)
                              
     except Exception as e:
-        logger.error(f"Error during analysis: {str(e)}")
-        return render_template('results.html', 
-                             error=f"An error occurred during analysis: {str(e)}")
+        return render_template('results.html', error=f"An error occurred during analysis: {str(e)}")
 
 @app.route("/design", methods=["POST"])
 def design():
