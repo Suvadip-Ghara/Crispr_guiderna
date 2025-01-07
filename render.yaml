@@ -4,17 +4,13 @@ services:
     env: python
     buildCommand: |
       #!/usr/bin/env bash
-      # Install system dependencies
-            wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
       echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
       apt-get update -y
       apt-get install -y google-chrome-stable chromium-driver
-
-      # Upgrade pip and install dependencies
       python -m pip install --upgrade pip
-      python -m pip install gunicorn
-      python -m pip install -r requirements.txt
-    startCommand: python -m gunicorn app:app --bind 0.0.0.0:$PORT --log-file -
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --log-file -
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.18
