@@ -3,6 +3,7 @@ name = "crisprguiderna"
 version = "0.1.0"
 description = ""
 authors = ["Suvadip Ghara <suvadipgha20@gmail.com>"]
+
 [tool.poetry.dependencies]
 python = "^3.9"
 flask = "==3.1.0"
