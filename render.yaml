@@ -3,14 +3,15 @@ services:
     name: crispor-scraping
     env: python
     buildCommand: |
-  #!/usr/bin/env bash
-  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-  echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
-  apt-get update -y
-  apt-get install -y google-chrome-stable chromium-driver
-  python -m pip install --upgrade pip
-  python -m pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --log-file -
+      #!/usr/bin/env bash
+      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+      echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+      apt-get update -y
+      apt-get install -y google-chrome-stable chromium-driver
+      python -m pip install --upgrade pip
+      pip install poetry
+      poetry install --no-root
+    startCommand: poetry run gunicorn app:app --bind 0.0.0.0:$PORT --log-file -
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.18
@@ -26,7 +27,6 @@ services:
     autoDeploy: true
     buildFilter:
       paths:
-        - requirements.txt
         - "**/*.py"
         - templates/**
         - static/**
