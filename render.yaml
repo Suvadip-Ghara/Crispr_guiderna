@@ -4,16 +4,14 @@ services:
     env: python
     buildCommand: |
       #!/usr/bin/env bash
-      echo "Starting build..."
+      set -e
       wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
       echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
       apt-get update -y
-      apt-get install -y google-chrome-stable chromium-driver
+      apt-get install -y google-chrome-stable
       python -m pip install --upgrade pip
-      pip install poetry==1.7.1
+      pip install poetry
       poetry install
-      poetry show
-      poetry env info
       which gunicorn
       gunicorn --version
     startCommand: poetry run gunicorn app:app --bind 0.0.0.0:$PORT --log-file -
@@ -26,8 +24,6 @@ services:
         value: "true"
       - key: CHROME_BIN
         value: /usr/bin/google-chrome
-      - key: CHROMEDRIVER_PATH
-        value: /usr/bin/chromedriver
     healthCheckPath: /
     autoDeploy: true
     buildFilter:
